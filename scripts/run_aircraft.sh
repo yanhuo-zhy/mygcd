@@ -1,9 +1,8 @@
 #!/bin/bash
-#SBATCH -p cs
+#SBATCH -p general
 #SBATCH -N 1
 #SBATCH --mem=20000
-#SBATCH --account cs
-#SBATCH --qos csstaff 
+#SBATCH --qos normal 
 #SBATCH -t 20:50:00
 #SBATCH --gres gpu:1
 #SBATCH -o /home/pszzz/hyzheng/mygcd/slurm_output/run_aircraft_baseline_seed0.txt
