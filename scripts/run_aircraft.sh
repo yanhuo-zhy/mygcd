@@ -2,10 +2,10 @@
 #SBATCH -p cs
 #SBATCH -N 1
 #SBATCH --mem=200000
-#SBATCH --qos amp48
+#SBATCH --qos csstaff
 #SBATCH -t 20:50:00
 #SBATCH --gres gpu:1
-#SBATCH -o /home/pszzz/fxyang/GCD/image_gcn_k100.txt
+#SBATCH -o /home/pszzz/hyzheng/mygcd/slurm_output/run_aircraft_baseline_seed0.txt
 
 module load gcc/gcc-10.2.0
 module load nvidia/cuda-10.0 nvidia/cudnn-v7.6.5.32-forcuda10.0
