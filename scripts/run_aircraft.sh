@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -p cs
 #SBATCH -N 1
-#SBATCH --mem=200000
+#SBATCH --mem=20000
 #SBATCH --account cs
 #SBATCH --qos csstaff 
 #SBATCH -t 20:50:00
