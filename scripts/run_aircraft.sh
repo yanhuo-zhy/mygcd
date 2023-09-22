@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -p amp48
+#SBATCH -p cs
 #SBATCH -N 1
 #SBATCH --mem=200000
 #SBATCH --qos amp48
