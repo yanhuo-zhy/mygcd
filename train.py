@@ -28,19 +28,19 @@ from scipy.optimize import linear_sum_assignment as linear_assignment
 # def scale_factor(epoch):
 #     return math.floor((0.7)**epoch * 40 + 10)
 
-def scale_factor1(epoch):
-    if epoch < 50:
-        num_values_to_replace = 1 + (epoch * 19) // 49  # Linearly increase from 1 to 20 over 50 epochs
-    else:
-        num_values_to_replace = 20
-    return num_values_to_replace
+# def scale_factor1(epoch):
+#     if epoch < 50:
+#         num_values_to_replace = 1 + (epoch * 19) // 49  # Linearly increase from 1 to 20 over 50 epochs
+#     else:
+#         num_values_to_replace = 20
+#     return num_values_to_replace
 
-def scale_factor2(epoch):
-    if epoch < 50:
-        num_values_to_replace = 1 + (epoch * 9) // 49  # Linearly increase from 1 to 20 over 50 epochs
-    else:
-        num_values_to_replace = 10
-    return num_values_to_replace 
+# def scale_factor2(epoch):
+#     if epoch < 50:
+#         num_values_to_replace = 1 + (epoch * 9) // 49  # Linearly increase from 1 to 20 over 50 epochs
+#     else:
+#         num_values_to_replace = 10
+#     return num_values_to_replace 
 
 def train(student, train_loader, test_loader, unlabelled_train_loader, args):
     params_groups = get_params_groups(student)
@@ -71,7 +71,7 @@ def train(student, train_loader, test_loader, unlabelled_train_loader, args):
     # best_train_acc_ubl = 0 
     # best_train_acc_all = 0
     # mymodel = MyModel(200, 256, 100).to('cuda')
-    feature_model = MyModel(num_classes=args.mlp_out_dim, feature_dim=256,K=len(train_loader.dataset)//args.batch_size*args.batch_size).to(args.device)
+    # feature_model = MyModel(num_classes=args.mlp_out_dim, feature_dim=256,K=len(train_loader.dataset)//args.batch_size*args.batch_size).to(args.device)
     
     for epoch in range(args.epochs):
         loss_record = AverageMeter()
@@ -164,48 +164,48 @@ def train(student, train_loader, test_loader, unlabelled_train_loader, args):
                 # neg_loss = loss_fn(selected_elements, torch.ones_like(selected_elements).float())
 
                 # ------------------------------------SimMatch loss---------------------------------------------------#
-                u_bank   = feature_model.u_bank.clone().detach()
-                u_labels = feature_model.u_labels.clone().detach()
+                # u_bank   = feature_model.u_bank.clone().detach()
+                # u_labels = feature_model.u_labels.clone().detach()
             
-                feature_w, feature_s = student_proj.chunk(2)[0], student_proj.chunk(2)[1]
-                logits_w, logits_s = student_out.chunk(2)[0], student_out.chunk(2)[1]
-                prob_w = F.softmax(logits_w, dim=1)
+                # feature_w, feature_s = student_proj.chunk(2)[0], student_proj.chunk(2)[1]
+                # logits_w, logits_s = student_out.chunk(2)[0], student_out.chunk(2)[1]
+                # prob_w = F.softmax(logits_w, dim=1)
 
-                simmatrix_w = feature_w @ u_bank.T
-                relation_w = F.softmax(simmatrix_w / 0.1, dim=-1)
-                simmatrix_s = feature_s @ u_bank.T
-                relation_s = F.softmax(simmatrix_s / 0.1, dim=-1)
-                # mask for old
-                # mask_for_old = class_labels < 98
+                # simmatrix_w = feature_w @ u_bank.T
+                # relation_w = F.softmax(simmatrix_w / 0.1, dim=-1)
+                # simmatrix_s = feature_s @ u_bank.T
+                # relation_s = F.softmax(simmatrix_s / 0.1, dim=-1)
+                # # mask for old
+                # # mask_for_old = class_labels < 98
 
-                # ee_loss = F.kl_div(relation_s.log(), relation_w, reduction='batchmean')
-                ee_loss = torch.sum(-relation_s.log() * relation_w.detach(), dim=1).mean()
-                # ee_loss = F.kl_div(relation_s.log(), relation_w, reduction='batchmean')
-                # kl_div_w_s = F.kl_div(relation_w.log(), relation_s, reduction='batchmean')
-                # ee_loss = 0.5 * (kl_div_s_w + kl_div_w_s)
+                # # ee_loss = F.kl_div(relation_s.log(), relation_w, reduction='batchmean')
+                # ee_loss = torch.sum(-relation_s.log() * relation_w.detach(), dim=1).mean()
+                # # ee_loss = F.kl_div(relation_s.log(), relation_w, reduction='batchmean')
+                # # kl_div_w_s = F.kl_div(relation_w.log(), relation_s, reduction='batchmean')
+                # # ee_loss = 0.5 * (kl_div_s_w + kl_div_w_s)
 
-                # mask_for_new = class_labels >= 98
-                # _, max_indices = torch.max(logits_s, dim=1)
-                # mask_for_new = max_indices >= 98
-                nn_qu = relation_s @ u_labels
-                ne_loss = torch.sum(-nn_qu.log() * prob_w.detach(), dim=1).mean()
+                # # mask_for_new = class_labels >= 98
+                # # _, max_indices = torch.max(logits_s, dim=1)
+                # # mask_for_new = max_indices >= 98
+                # nn_qu = relation_s @ u_labels
+                # ne_loss = torch.sum(-nn_qu.log() * prob_w.detach(), dim=1).mean()
 
-                feature_model.update_unlabel_bank(feature_w, prob_w)
+                # feature_model.update_unlabel_bank(feature_w, prob_w)
 
                 pstr = ''
                 pstr += f'cls_loss: {cls_loss.item():.4f} '
                 pstr += f'cluster_loss: {cluster_loss.item():.4f} '
                 pstr += f'sup_con_loss: {sup_con_loss.item():.4f} '
                 pstr += f'contrastive_loss: {contrastive_loss.item():.4f} '
-                pstr += f'ee_loss: {ee_loss.item():.4f} '
-                pstr += f'ne_loss: {ne_loss.item():.4f} '
+                # pstr += f'ee_loss: {ee_loss.item():.4f} '
+                # pstr += f'ne_loss: {ne_loss.item():.4f} '
 
                 loss = 0
                 loss += (1 - args.sup_weight) * cluster_loss + args.sup_weight * cls_loss
                 loss += (1 - args.sup_weight) * contrastive_loss + args.sup_weight * sup_con_loss
-                if epoch > 0:
+                # if epoch > 0:
                     # loss += ee_loss
-                    loss += ne_loss
+                    # loss += ne_loss
                     # loss += (1 - args.sup_weight) * ne_loss + args.sup_weight * ee_loss
                 # if epoch > 0:
                 #     regular_proj = torch.nn.functional.normalize(student_proj, dim=-1)
@@ -582,7 +582,7 @@ def setup_seed(seed):
     torch.backends.cudnn.deterministic = True
 
 if __name__ == "__main__":
-    setup_seed(1)
+
     parser = argparse.ArgumentParser(description='cluster', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--batch_size', default=128, type=int)
     parser.add_argument('--num_workers', default=8, type=int)
@@ -611,12 +611,14 @@ if __name__ == "__main__":
 
     parser.add_argument('--fp16', action='store_true', default=False)
     parser.add_argument('--print_freq', default=1, type=int)
-    parser.add_argument('--exp_name', default='cub-simgcd-weak-strong-neloss', type=str)
+    parser.add_argument('--exp_name', default='', type=str)
+    parser.add_argument('--seed_num', default=0, type=int)
 
     # ----------------------
     # INIT
     # ----------------------
     args = parser.parse_args()
+    setup_seed(args.seed_num)
     device = torch.device('cuda:0')
     args = get_class_splits(args)
     args.device = device
@@ -624,7 +626,7 @@ if __name__ == "__main__":
     args.num_labeled_classes = len(args.train_classes)
     args.num_unlabeled_classes = len(args.unlabeled_classes)
 
-    init_experiment(args, runner_name=['zero'])
+    init_experiment(args, runner_name=['baseline'])
     args.logger.info(f'Using evaluation function {args.eval_funcs[0]} to print results')
     
     torch.backends.cudnn.benchmark = True
@@ -635,9 +637,9 @@ if __name__ == "__main__":
     args.interpolation = 3
     args.crop_pct = 0.875
 
-    # backbone = torch.hub.load('facebookresearch/dino:main', 'dino_vitb16')
-    backbone = vit_base()
-    backbone.load_state_dict(torch.load('/wang_hp/zhy/gcd-task/pretrained/DINO/dino_vitbase16_pretrain.pth'))
+    backbone = torch.hub.load('facebookresearch/dino:main', 'dino_vitb16')
+    # backbone = vit_base()
+    # backbone.load_state_dict(torch.load('/wang_hp/zhy/gcd-task/pretrained/DINO/dino_vitbase16_pretrain.pth'))
     
     if args.warmup_model_dir is not None:
         args.logger.info(f'Loading weights from {args.warmup_model_dir}')

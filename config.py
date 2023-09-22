@@ -4,9 +4,9 @@
 cifar_10_root = '${DATASET_DIR}/cifar10'
 cifar_100_root = '${DATASET_DIR}/cifar100'
 # cub_root = '${DATASET_DIR}/cub'
-cub_root = '/wang_hp/zhy/gcd-task/data'
-aircraft_root = '/wang_hp/zhy/gcd-task/data/fgvc-aircraft-2013b'
-car_root = '/wang_hp/zhy/gcd-task/data/cars'
+cub_root = ''
+aircraft_root = '/db/pszzz/NCD_dataset/aircraft/fgvc-aircraft-2013b'
+car_root = ''
 herbarium_dataroot = '${DATASET_DIR}/herbarium_19'
 imagenet_root = '${DATASET_DIR}/ImageNet'
 

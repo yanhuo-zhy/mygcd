@@ -285,14 +285,14 @@ class ContrastiveLearningViewGenerator(object):
                                                 ])
 
     def __call__(self, x):
-        if not isinstance(self.base_transform, list):
-            return [self.base_transform(x), self.base_transform(x), moco_aug(x)]
-        else:
-            return [self.base_transform(x), self.base_transform(x), moco_aug(x)]
         # if not isinstance(self.base_transform, list):
-        #     return [self.base_transform(x) for i in range(self.n_views)]
+        #     return [self.base_transform(x), self.base_transform(x), moco_aug(x)]
         # else:
-        #     return [self.base_transform[i](x) for i in range(self.n_views)]
+        #     return [self.base_transform(x), self.base_transform(x), moco_aug(x)]
+        if not isinstance(self.base_transform, list):
+            return [self.base_transform(x) for i in range(self.n_views)]
+        else:
+            return [self.base_transform[i](x) for i in range(self.n_views)]
 
 class SupConLoss(torch.nn.Module):
     """Supervised Contrastive Learning: https://arxiv.org/pdf/2004.11362.pdf.

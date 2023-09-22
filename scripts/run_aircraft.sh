@@ -1,7 +1,16 @@
 #!/bin/bash
+#SBATCH -p amp48
+#SBATCH -N 1
+#SBATCH --mem=200000
+#SBATCH --qos amp48
+#SBATCH -t 20:50:00
+#SBATCH --gres gpu:1
+#SBATCH -o /home/pszzz/fxyang/GCD/image_gcn_k100.txt
 
-set -e
-set -x
+module load gcc/gcc-10.2.0
+module load nvidia/cuda-10.0 nvidia/cudnn-v7.6.5.32-forcuda10.0
+
+source /home/pszzz/miniconda3/bin/activate zhy
 
 CUDA_VISIBLE_DEVICES=0 python train.py \
     --dataset_name 'aircraft' \
@@ -20,3 +29,4 @@ CUDA_VISIBLE_DEVICES=0 python train.py \
     --warmup_teacher_temp_epochs 30 \
     --memax_weight 1 \
     --exp_name aircraft_simgcd
+    --exp_root uon_hpc
