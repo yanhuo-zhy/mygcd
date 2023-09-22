@@ -28,5 +28,6 @@ CUDA_VISIBLE_DEVICES=0 python train.py \
     --teacher_temp 0.04 \
     --warmup_teacher_temp_epochs 30 \
     --memax_weight 1 \
-    --exp_name aircraft_simgcd
-    --exp_root uon_hpc
+    --exp_name 'aircraft_simgcd' \
+    --exp_root 'uon_hpc' \
+    --seed_num  0
